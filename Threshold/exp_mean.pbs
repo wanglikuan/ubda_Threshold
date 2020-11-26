@@ -1,0 +1,46 @@
+##!/bin/sh
+#PBS -N o_mpi_ps
+#PBS -l nodes=1:ppn=1 -W x=GRES:gpu@1
+#PBS -l walltime=36:00:00
+#PBS -q qgpu01
+#PBS -V
+#PBS -S /bin/bash
+
+module load anaconda3-5.2.0
+module load cuda-9.0
+module load openmpi-3.0.1-gcc-5.5.0
+source activate py_gpu
+#################################################################
+NP=`cat $PBS_NODEFILE | wc -l`
+NN=`cat $PBS_NODEFILE | sort | uniq | tee /tmp/nodes.$$ | wc -l`
+cat $PBS_NODEFILE > /tmp/nodefile.$$
+echo "process will start at : "
+date
+echo "++++++++++++++++++++++++++++++++++++++++"
+cd $PBS_O_WORKDIR
+
+nvidia-smi > nv.out
+# mpirun -n $NP python start.py --model=LROnCifar10 --workers=10 --epoch=10 --E=1 --ratio=1 --lr=0.01 --method=TrimmedMean > DGSVRB_LR_E1_R1.out
+# mpirun -n $NP python LearnerSimulation.py --model=ResNet18OnCifar10 --workers=15 --loops=1 --ratio=5 --epoch=7000 --byzantine=2 --V=0 --method=FABA > 22.out
+
+# mpirun -n $NP python LearnerSimulation.py --model=ResNet18OnCifar10 --workers=15 --loops=10 --ratio=5 --epoch=7000 --byzantine=1 --V=0 --method=FABA > V1_LR_Mnist_15workers_FABA.out
+
+# mpirun -n $NP python LearnerSimulation.py --model=ResNet18OnCifar10 --workers=15 --loops=1 --ratio=5 --epoch=7000 --byzantine=1 --V=0 --method=Mean > b1.out
+# mpirun -n $NP python LearnerSimulation.py --model=ResNet18OnCifar10 --workers=15 --loops=3 --ratio=5 --epoch=7000 --byzantine=1 --V=0 --method=Mean > b2.out
+# mpirun -n $NP python LearnerSimulation.py --model=ResNet18OnCifar10 --workers=15 --loops=5 --ratio=5 --epoch=7000 --byzantine=1 --V=0 --method=Mean > b3.out
+# mpirun -n $NP python LearnerSimulation.py --model=ResNet18OnCifar10 --workers=15 --loops=7 --ratio=5 --epoch=7000 --byzantine=1 --V=0 --method=Mean > b4.out
+
+# mpirun -n $NP python LearnerSimulation.py --model=ResNet18OnCifar10 --workers=15 --loops=1 --ratio=5 --epoch=7000 --byzantine=1 --V=0 --method=FABA > d11.out
+# mpirun -n $NP python LearnerSimulation.py --model=ResNet18OnCifar10 --workers=15 --loops=1 --ratio=5 --epoch=7000 --byzantine=2 --V=0 --method=FABA > d22.out
+# mpirun -n $NP python LearnerSimulation.py --model=ResNet18OnCifar10 --workers=15 --loops=1 --ratio=5 --epoch=7000 --byzantine=3 --V=0 --method=FABA > d33.out
+# mpirun -n $NP python LearnerSimulation.py --model=ResNet18OnCifar10 --workers=15 --loops=1 --ratio=5 --epoch=7000 --byzantine=4 --V=0 --method=FABA > d44.out
+mpirun -n $NP python LearnerSimulation.py --model=ResNet18OnCifar10 --workers=15 --loops=1 --ratio=0.01 --epoch=7000 --byzantine=0 --V=0 --alpha=0.1 --beta=0.9 --method=Mean > aaa2.out
+
+echo "++++++++++++++++++++++++++++++++++++++++"
+echo "process end at : "
+date
+rm -f /tmp/nodefile.$$
+rm -f /tmp/nodes.$$
+
+module unload openmpi-3.0.1-gcc-5.5.0
+module unload cuda-9.0
