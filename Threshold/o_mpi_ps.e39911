@@ -1,0 +1,2 @@
+WARNING: $PATH does not agree with $PATH_modshare counter. The following directories' usage counters were adjusted to match. Note that this may mean that module unloading may not work correctly.
+ /ubda/apps/anaconda/anaconda3-5.2.0/bin

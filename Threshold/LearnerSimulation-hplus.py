@@ -45,7 +45,7 @@ parser.add_argument('--loops', type=int, default=10)
 parser.add_argument('--byzantine', type=int, default=1)
 parser.add_argument('--V', type=float, default=100)
 parser.add_argument('--T', type=int, default=1)
-parser.add_argument('--title', type=str, default='Threshold')
+parser.add_argument('--title', type=str, default='Threshold-alphaminus')
 parser.add_argument('--method', type=str, default='TrimmedMean')
 
 parser.add_argument('--alpha', type=float, default=0)
@@ -423,7 +423,7 @@ def run(workers, models, save_path, train_data_list, test_data, iterations_epoch
 
                 new_g_avg = [torch.zeros_like(g_layer) + g_layer for g_layer in update_new]
                 for idx, g_layer in enumerate(update_new):
-                    new_g_avg[idx] += args.alpha * (h_last_list[i - 1][idx] - h_remain_list[i - 1][idx])
+                    new_g_avg[idx] -= args.alpha * (h_last_list[i - 1][idx] - h_remain_list[i - 1][idx])
 
                 g_remain, g_large_change, sparsification_ratio = get_upload(g_remain_list[i - 1], new_g_avg, args.ratio, args.isCompensate, threshold, dev)
                 g_remain_list[i - 1] = g_remain

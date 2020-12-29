@@ -34,7 +34,7 @@ nvidia-smi > nv.out
 # mpirun -n $NP python LearnerSimulation.py --model=ResNet18OnCifar10 --workers=15 --loops=1 --ratio=5 --epoch=7000 --byzantine=2 --V=0 --method=FABA > d22.out
 # mpirun -n $NP python LearnerSimulation.py --model=ResNet18OnCifar10 --workers=15 --loops=1 --ratio=5 --epoch=7000 --byzantine=3 --V=0 --method=FABA > d33.out
 # mpirun -n $NP python LearnerSimulation.py --model=ResNet18OnCifar10 --workers=15 --loops=1 --ratio=5 --epoch=7000 --byzantine=4 --V=0 --method=FABA > d44.out
-mpirun -n $NP python LearnerSimulation.py --model=ResNet18OnCifar10 --workers=15 --loops=1 --ratio=0.01 --epoch=7000 --byzantine=0 --V=0 --alpha=0.1 --beta=0.9 --method=Mean > aaa2.out
+mpirun -n $NP python LearnerSimulation.py --model=ResNet18OnCifar10 --workers=15 --loops=1 --ratio=50 --train-bsz=100 --lr=0.01 --epoch=7000 --byzantine=0 --V=0 --alpha=0 --beta=1 --method=Mean > aaa2.out
 
 echo "++++++++++++++++++++++++++++++++++++++++"
 echo "process end at : "
